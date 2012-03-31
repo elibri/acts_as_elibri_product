@@ -42,4 +42,26 @@ describe ActsAsElibriProduct do
     Product.all.map(&:record_reference).should include('abcde')
   end
   
+  it "should create and update two products from xml containing two products" do
+    Product.count.should eq(0)
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :isbn_value => '1234567890')
+    book_2 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcde', :isbn_value => '9876543210')
+    book_array = [book, book_2]
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_array).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.count.should eq(2)
+    Product.all.map(&:record_reference).should include('abcd')
+    Product.all.map(&:record_reference).should include('abcde')
+    Product.find(:first, :conditions => {:record_reference => 'abcd'}).isbn.should eq('1234567890')
+    Product.find(:first, :conditions => {:record_reference => 'abcde'}).isbn.should eq('9876543210')
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :isbn_value => '9876543210')
+    book_2 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcde', :isbn_value => '1234567890')
+    book_array = [book, book_2]
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_array).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.count.should eq(2)
+    Product.find(:first, :conditions => {:record_reference => 'abcd'}).isbn.should eq('9876543210')
+    Product.find(:first, :conditions => {:record_reference => 'abcde'}).isbn.should eq('1234567890')
+  end
+  
 end
