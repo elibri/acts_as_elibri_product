@@ -1,0 +1,8 @@
+Description:
+    Explain the generator
+
+Example:
+    rails generate add_acts_as_elibri_product Thing
+
+    This will create:
+        what/will/it/create
