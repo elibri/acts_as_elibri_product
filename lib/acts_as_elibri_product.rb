@@ -32,7 +32,7 @@ module ActsAsElibriProduct
     product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(xml_string).products.first
     db_product = self.new
     @@traverse_vector.each_pair do |k, v|
-      db_product.send(k) = product.send(v)
+  #    db_product.send(k) = product.send(v)
       db_product.old_xml = xml_string
       db_product.save
     end
