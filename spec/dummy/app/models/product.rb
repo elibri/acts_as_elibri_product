@@ -48,8 +48,9 @@ class Product < ActiveRecord::Base
                   :cover_type, :edition_statement, :audience_age_from, :audience_age_to, 
                   :price_amount, :vat, :current_state, :product_form, :old_xml
                   
+  #po lewej stronie to co w elibri, po prawej co ma być w naszej bazie               
   acts_as_elibri_product :record_reference => :record_reference,
-         :isbn => :product,
+         :isbn13 => :isbn,
          :title => :title,
          :full_title => :full_title,
          :trade_title => :trade_title,
@@ -61,13 +62,13 @@ class Product < ActiveRecord::Base
          :cover_type => :cover_type,
          :pkwiu => :pkwiu,
          :edition_statement => :edition_statement,
-         :audience_age_from => :reading_age_from,
-         :audience_age_to => :reading_age_to,
-         :price_amount => :cover_price,
+         :reading_age_from => :audience_age_from,
+         :reading_age_to => :audience_age_to,
+         :cover_price => :price_amount,
          :vat => :vat,
          :product_form => :product_form,
-         :no_contributor => :no_contributor?,
-         :unnamed_persons => :unnamed_persons?
+         :no_contributor? => :no_contributor,
+         :unnamed_persons? => :unnamed_persons
          
   def self.batch_update(products, dialect)
     #products - response.onix.products dajemy tam wyzej

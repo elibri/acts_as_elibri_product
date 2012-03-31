@@ -148,3 +148,36 @@ DEPRECATION WARNING: You're trying to create an attribute `<?xml version='1.0' e
     </PublishingDate>
   </PublishingDetail>
 </Product></ONIXMessage>'. Writing arbitrary attributes on a model is deprecated. Please just use `attr_writer` etc. (called from update_product_from_elibri at /Users/esse/work/gildia/acts_as_elibri_product/lib/acts_as_elibri_product.rb:28)
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to CreateContributors (20120315120937)
+Migrating to CreateProductTexts (20120315131231)
+Migrating to CreateProducts (20120315134035)
+Migrating to AddOldXmlToProductModel (20120330183626)
+  [1m[35m (0.1ms)[0m  select sqlite_version(*)
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("contributors")
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("product_texts")[0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("products")
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to CreateContributors (20120315120937)
+Migrating to CreateProductTexts (20120315131231)
+Migrating to CreateProducts (20120315134035)
+Migrating to AddOldXmlToProductModel (20120330183626)
+  [1m[35m (0.1ms)[0m  select sqlite_version(*)
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("contributors")
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("product_texts")[0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("products")
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.1ms)[0m  select sqlite_version(*)
+  [1m[36m (1.7ms)[0m  [1mCREATE TABLE "contributors" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "import_id" integer, "product_id" integer, "role_name" varchar(255), "role" varchar(255), "from_language" varchar(255), "full_name" varchar(255), "title" varchar(255), "first_name" varchar(255), "last_name_prefix" varchar(255), "last_name" varchar(255), "last_name_postfix" varchar(255), "biography" text, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) [0m
+  [1m[35m (1.3ms)[0m  CREATE TABLE "product_texts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "import_id" integer, "product_id" integer, "text" text, "type" varchar(255), "text_author" varchar(255), "source_title" varchar(255), "resource_link" varchar(255), "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL) 
+  [1m[36m (1.7ms)[0m  [1mCREATE TABLE "products" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "record_reference" varchar(255) NOT NULL, "isbn" varchar(255), "title" varchar(255), "full_title" varchar(255), "trade_title" varchar(255), "original_title" varchar(255), "publication_year" integer, "publication_month" integer, "publication_day" integer, "number_of_pages" integer, "duration" integer, "width" integer, "height" integer, "cover_type" varchar(255), "edition_statement" varchar(255), "audience_age_from" integer, "audience_age_to" integer, "price_amount" varchar(255), "vat" integer, "pkwiu" varchar(255), "current_state" varchar(255), "product_form" varchar(255), "preview_exists" boolean DEFAULT 'f', "no_contributor" boolean DEFAULT 'f', "unnamed_persons" boolean DEFAULT 'f', "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "old_xml" text) [0m
+  [1m[35m (1.4ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("schema_migrations")[0m
+  [1m[35m (1.6ms)[0m  CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")
+  [1m[36m (0.1ms)[0m  [1mSELECT version FROM "schema_migrations"[0m
+  [1m[35m (1.6ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20120330183626')
+  [1m[36m (2.2ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20120315120937')[0m
+  [1m[35m (1.7ms)[0m  INSERT INTO "schema_migrations" (version) VALUES ('20120315131231')
+  [1m[36m (1.6ms)[0m  [1mINSERT INTO "schema_migrations" (version) VALUES ('20120315134035')[0m
