@@ -35,6 +35,21 @@ module ActsAsElibriProduct
         Product.create_from_elibri(xml_string)
       end
     end
+    
+    def batch_create_or_update_from_elibri(xml_string)
+      recreated_products = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(xml_string)
+      recreated_products.products.each do |product|
+        xml = product.to_xml.to_s
+        dialect = product.elibri_dialect
+        header = "<?xml version='1.0' encoding='UTF-8'?>
+                  <ONIXMessage xmlns:elibri='http://elibri.com.pl/ns/extensions' xmlns='`http://www.editeur.org/onix/3.0/reference' release='3.0'>
+                      <elibri:Dialect>#{dialect}</elibri:Dialect>"
+
+        xml = header + xml + "</ONIXMessage>"
+        create_or_update_from_elibri(xml)
+      end
+    end
+    
   end
   
   def update_product_from_elibri(new_xml)
