@@ -22,6 +22,9 @@ module ActsAsElibriProduct
       @@traverse_vector.each_pair do |k, v|
         if v.is_a?(Symbol)
           db_product.send(:write_attribute, v, product.send(k))
+        elsif v.is_a?(Hash)
+          object = db_product.send(v.keys.first)
+          ActsAsElibriProduct.set_objects_from_array(k, v.keys.first, v.values.first, product.send(k), db_product)
         end
       end
       db_product.old_xml = xml_string
@@ -75,6 +78,24 @@ module ActsAsElibriProduct
   
   def traverse_vector
     ActsAsElibriProduct::ClassMethods.traverse_vector
+  end
+  
+  def self.set_objects_from_array(elibri_object_name, db_object_name, object_traverse_vector, elibri_objects, db_product)
+    if elibri_objects.is_a?(Array)
+      elibri_objects.each do |elibri_object|
+        db_product.send(db_object_name).build.tap do |inner_object|
+      #    db_product.send
+          object_traverse_vector.each_pair do |k, v|
+            if v.is_a?(Hash)
+              #TODO
+             # set_objects_from_array(object.send(v.keys.first), v.values.first, product, k)
+            else
+              inner_object.send(:write_attribute, v, elibri_object.send(k))
+            end
+          end
+        end
+      end
+    end
   end
       
 end

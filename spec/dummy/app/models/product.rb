@@ -68,7 +68,21 @@ class Product < ActiveRecord::Base
          :vat => :vat,
          :product_form => :product_form,
          :no_contributor? => :no_contributor,
-         :unnamed_persons? => :unnamed_persons
+         :unnamed_persons? => :unnamed_persons,
+         :contributors => { #Jak się nazywa w eLibri
+           :contributors => { #Jak się nazywa w naszej bazie
+             :id => :import_id, #przeksztalcenie nazw atrybutow elibri => nasza baza
+             :role_name => :role_name,
+             :role => :role,
+             :from_language => :from_language,
+             :person_name => :full_name,
+             :titles_before_names => :title,
+             :names_before_key => :first_name,
+             :prefix_to_key => :last_name_prefix,
+             :key_names => :last_name,
+             :names_after_key => :last_name_postfix,
+             :biographical_note => :biography
+         }}
          
   def self.batch_update(products, dialect)
     #products - response.onix.products dajemy tam wyzej
