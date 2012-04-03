@@ -71,4 +71,44 @@ describe ActsAsElibriProduct do
     Product.find(:first, :conditions => {:record_reference => 'abcde'}).isbn.should eq('1234567890')
   end
   
+  it "should create and update two products from xml containing two products with authors" do
+    Product.count.should eq(0)
+    contributor = Elibri::XmlMocks::Examples.contributor_mock(:last_name => 'Mickiewicz', :name => 'Adam', :artificial_id => 123)
+    contributor_2 = Elibri::XmlMocks::Examples.contributor_mock(:last_name => 'Sienkiewicz', :name => 'Henryk', :artificial_id => 124)
+    contributor_3 = Elibri::XmlMocks::Examples.contributor_mock(:last_name => 'Orwell', :name => 'George', :artificial_id => 125)
+    contributor_4 = Elibri::XmlMocks::Examples.contributor_mock(:last_name => 'Prus', :name => 'Bolesław', :artificial_id => 126)
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :isbn_value => '1234567890', :contributors => [contributor])
+    book_2 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcde', :isbn_value => '9876543210', :contributors => [contributor_2])
+    book_array = [book, book_2]
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_array).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.count.should eq(2)
+    Product.all.map(&:record_reference).should include('abcd')
+    Product.all.map(&:record_reference).should include('abcde')
+    Product.find(:first, :conditions => {:record_reference => 'abcd'}).isbn.should eq('1234567890')
+    Product.find(:first, :conditions => {:record_reference => 'abcde'}).isbn.should eq('9876543210')
+    Contributor.count.should eq(2)
+    Product.find(:first, :conditions => {:record_reference => 'abcd'}).contributors.first.first_name.should eq("Adam")
+    Product.find(:first, :conditions => {:record_reference => 'abcd'}).contributors.first.last_name.should eq("Mickiewicz")
+    Product.find(:first, :conditions => {:record_reference => 'abcde'}).contributors.first.first_name.should eq("Henryk")
+    Product.find(:first, :conditions => {:record_reference => 'abcde'}).contributors.first.last_name.should eq("Sienkiewicz")
+    Product.find(:first, :conditions => {:record_reference => 'abcd'}).contributors.count.should eq(1)
+    Product.find(:first, :conditions => {:record_reference => 'abcde'}).contributors.count.should eq(1)
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :isbn_value => '9876543210', :contributors => [contributor_3])
+    book_2 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcde', :isbn_value => '1234567890', :contributors => [contributor_4])
+    book_array = [book, book_2]
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_array).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.count.should eq(2)
+    Product.find(:first, :conditions => {:record_reference => 'abcd'}).isbn.should eq('9876543210')
+    Product.find(:first, :conditions => {:record_reference => 'abcde'}).isbn.should eq('1234567890')
+    Contributor.count.should eq(2)
+    Product.find(:first, :conditions => {:record_reference => 'abcd'}).contributors.first.first_name.should eq("George")
+    Product.find(:first, :conditions => {:record_reference => 'abcd'}).contributors.first.last_name.should eq("Orwell")
+    Product.find(:first, :conditions => {:record_reference => 'abcde'}).contributors.first.first_name.should eq("Bolesław")
+    Product.find(:first, :conditions => {:record_reference => 'abcde'}).contributors.first.last_name.should eq("Prus")
+    Product.find(:first, :conditions => {:record_reference => 'abcd'}).contributors.count.should eq(1)
+    Product.find(:first, :conditions => {:record_reference => 'abcde'}).contributors.count.should eq(1)
+  end
+  
 end
