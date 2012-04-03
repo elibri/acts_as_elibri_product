@@ -4,7 +4,7 @@ class CreateProductTexts < ActiveRecord::Migration
       t.integer :import_id
       t.integer :product_id
       t.text :text
-      t.string :type
+      t.string :text_type
       t.string :text_author
       t.string :source_title
       t.string :resource_link

@@ -28,7 +28,7 @@ module ActsAsElibriProduct
           db_product.send(:write_attribute, v, product.send(k))
         elsif v.is_a?(Hash)
           object = db_product.send(v.keys.first)
-          ActsAsElibriProduct.set_objects_from_array(k, v.keys.first, v.values.first, product.send(k), db_product)
+          ActsAsElibriProduct.set_objects_from_array(k, v.keys.first, v.values.first, product.send(k), db_product) if product.send(k)
         end
       end
       db_product.old_xml = xml_string
@@ -113,6 +113,20 @@ end
             end
           end
         end
+      end
+    else
+      db_product.send(db_object_name).tap do |inner_object|
+        inner_object = db_product.send(db_object_name).build if inner_object.is_a?(Array) 
+    #    db_product.send
+        object_traverse_vector.each_pair do |k, v|
+          if v.is_a?(Hash)
+            #TODO
+           # set_objects_from_array(object.send(v.keys.first), v.values.first, product, k)
+          else
+            inner_object.send(:write_attribute, v, elibri_objects.send(k))
+          end
+        end
+        inner_object.save
       end
     end
   end

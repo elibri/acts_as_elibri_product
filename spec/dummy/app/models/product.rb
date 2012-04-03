@@ -82,7 +82,18 @@ class Product < ActiveRecord::Base
              :key_names => :last_name,
              :names_after_key => :last_name_postfix,
              :biographical_note => :biography
-         }}
+           }
+         },
+         :text_contents => { #Jak się nazywa w eLibri
+           :product_texts => { #Jak się nazywa w naszej bazie
+             :id => :import_id, #przeksztalcenie nazw atrybutow elibri => nasza baza
+             :text => :text,
+             :type_name => :text_type,
+             :author => :text_author,
+             :source_title => :source_title,
+             :source_url => :resource_link
+           }
+         }
          
   def self.batch_update(products, dialect)
     #products - response.onix.products dajemy tam wyzej
