@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 #  s.add_dependency "elibri_xml_versions", :path => '/Users/esse/work/gildia/elibri_xml_versions'
 #  s.add_development_dependency "elibri_onix_mocks", :path => '/Users/esse/work/gildia/elibri_xml_versions'
 
-s.add_development_dependency "rspec"
+  s.add_development_dependency "rspec"
   s.add_development_dependency "rspec-rails"
 
   s.add_development_dependency "sqlite3"

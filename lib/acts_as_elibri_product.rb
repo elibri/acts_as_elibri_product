@@ -1,3 +1,7 @@
+require 'elibri_onix_mocks'
+require 'elibri_xml_versions'
+require 'ostruct'
+
 module ActsAsElibriProduct
   extend ActiveSupport::Concern
   
@@ -70,11 +74,26 @@ module ActsAsElibriProduct
       elsif false #TODO: obsluga arrayow
         
       end
-      
+    details[:deleted].each do |deleted|
+      if traverse_vector[deleted.keys.first] && traverse_vector[deleted.keys.first].keys.first       
+        deleted.values.first.each do |del|
+          self.send(traverse_vector[deleted.keys.first].keys.first).find { |x| x.send(traverse_vector[deleted.keys.first].values.first[:id]) == del.id }.delete
+        end
+      end
+    end
+    details[:added].each do |added|
+      if traverse_vector[added.keys.first] && traverse_vector[added.keys.first].keys.first
+        ActsAsElibriProduct.set_objects_from_array(traverse_vector[added.keys.first], traverse_vector[added.keys.first].keys.first, traverse_vector[added.keys.first].values.first, added.values.first, self)
+ #       object = self.send(traverse_vector[added.keys.first].keys.first)
+#        ActsAsElibriProduct.set_objects_from_array(traverse_vector[added.keys.first].keys.fir, v.keys.first, v.values.first, product.send(k), db_product)
+      end
     end
     write_attribute(:old_xml, new_xml)
     self.save
+  
   end
+  
+end
   
   def traverse_vector
     ActsAsElibriProduct::ClassMethods.traverse_vector

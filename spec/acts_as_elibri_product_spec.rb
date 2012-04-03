@@ -5,29 +5,36 @@ $VERBOSE = nil
 
 describe ActsAsElibriProduct do
   
-  it "should create product when given new xml" do
+  it "should create product when given new xml with contributor" do
     Product.count.should eq(0)
-    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd')
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :contributors => [Elibri::XmlMocks::Examples.contributor_mock])
     book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
+    product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(book_xml).products.first
     Product.batch_create_or_update_from_elibri(book_xml)
     Product.first.record_reference.should eq("abcd")
     Product.count.should eq(1)
+    Product.first.contributors.count.should eq(1)
+    Contributor.count.should eq(1)
   end
   
   it "should create and update product with same record_reference" do
     Product.count.should eq(0)
-    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :isbn_value => '1234567890')
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :isbn_value => '1234567890', :contributors => [Elibri::XmlMocks::Examples.contributor_mock(:last_name => 'Mickiewicz', :name => 'Adam', :artificial_id => 123)])
     book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
     Product.batch_create_or_update_from_elibri(book_xml)
     Product.first.record_reference.should eq("abcd")
     Product.first.isbn.should eq("1234567890")
     Product.count.should eq(1)
-    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :isbn_value => '9876543210') 
+    Product.first.contributors.first.first_name.should eq("Adam")
+    Product.first.contributors.first.last_name.should eq("Mickiewicz")
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :isbn_value => '9876543210', :contributors => [Elibri::XmlMocks::Examples.contributor_mock(:last_name => 'Sienkiewicz', :name => 'Henryk', :artificial_id => 123)]) 
     book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
     Product.batch_create_or_update_from_elibri(book_xml)
     Product.first.record_reference.should eq("abcd")
     Product.count.should eq(1)
     Product.first.isbn.should eq("9876543210")
+    Product.first.contributors.first.first_name.should eq("Henryk")
+    Product.first.contributors.first.last_name.should eq("Sienkiewicz")
   end
   
   it "should create two products from xml containing two products" do

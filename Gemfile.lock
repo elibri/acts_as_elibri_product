@@ -1,11 +1,6 @@
-PATH
-  remote: .
-  specs:
-    acts_as_elibri_product (0.0.1)
-      rails (~> 3.2.0)
-
-PATH
-  remote: /Users/esse/work/gildia/elibri_onix_mocks
+GIT
+  remote: https://github.com/elibri/elibri_onix_mocks.git
+  revision: d92e67a30fb14fc1e5838ea401801c183fbec541
   specs:
     elibri_onix_mocks (0.1.0)
       activesupport
@@ -14,39 +9,48 @@ PATH
       elibri_onix_dict
       mocha
 
-PATH
-  remote: /Users/esse/work/gildia/elibri_xml_versions
+GIT
+  remote: https://github.com/elibri/elibri_xml_versions.git
+  revision: 435a50b4e886da826c92f2298426c76784c08273
   specs:
     elibri_xml_versions (0.1.0)
+      elibri_api_client
+      elibri_onix_dict
+
+PATH
+  remote: .
+  specs:
+    acts_as_elibri_product (0.0.1)
+      rails (~> 3.2.0)
 
 GEM
   remote: http://rubygems.org/
   specs:
-    actionmailer (3.2.2)
-      actionpack (= 3.2.2)
-      mail (~> 2.4.0)
-    actionpack (3.2.2)
-      activemodel (= 3.2.2)
-      activesupport (= 3.2.2)
+    actionmailer (3.2.3)
+      actionpack (= 3.2.3)
+      mail (~> 2.4.4)
+    actionpack (3.2.3)
+      activemodel (= 3.2.3)
+      activesupport (= 3.2.3)
       builder (~> 3.0.0)
       erubis (~> 2.7.0)
       journey (~> 1.0.1)
       rack (~> 1.4.0)
-      rack-cache (~> 1.1)
+      rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.1.2)
-    activemodel (3.2.2)
-      activesupport (= 3.2.2)
+    activemodel (3.2.3)
+      activesupport (= 3.2.3)
       builder (~> 3.0.0)
-    activerecord (3.2.2)
-      activemodel (= 3.2.2)
-      activesupport (= 3.2.2)
+    activerecord (3.2.3)
+      activemodel (= 3.2.3)
+      activesupport (= 3.2.3)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
-    activeresource (3.2.2)
-      activemodel (= 3.2.2)
-      activesupport (= 3.2.2)
-    activesupport (3.2.2)
+    activeresource (3.2.3)
+      activemodel (= 3.2.3)
+      activesupport (= 3.2.3)
+    activesupport (3.2.3)
       i18n (~> 0.6)
       multi_json (~> 1.0)
     arel (3.0.2)
@@ -96,17 +100,17 @@ GEM
       rack
     rack-test (0.6.1)
       rack (>= 1.0)
-    rails (3.2.2)
-      actionmailer (= 3.2.2)
-      actionpack (= 3.2.2)
-      activerecord (= 3.2.2)
-      activeresource (= 3.2.2)
-      activesupport (= 3.2.2)
+    rails (3.2.3)
+      actionmailer (= 3.2.3)
+      actionpack (= 3.2.3)
+      activerecord (= 3.2.3)
+      activeresource (= 3.2.3)
+      activesupport (= 3.2.3)
       bundler (~> 1.0)
-      railties (= 3.2.2)
-    railties (3.2.2)
-      actionpack (= 3.2.2)
-      activesupport (= 3.2.2)
+      railties (= 3.2.3)
+    railties (3.2.3)
+      actionpack (= 3.2.3)
+      activesupport (= 3.2.3)
       rack-ssl (~> 1.3.2)
       rake (>= 0.8.7)
       rdoc (~> 3.4)
@@ -118,19 +122,19 @@ GEM
     roxml (3.1.3)
       activesupport (>= 2.1.0)
       nokogiri (>= 1.3.3)
-    rspec (2.8.0)
-      rspec-core (~> 2.8.0)
-      rspec-expectations (~> 2.8.0)
-      rspec-mocks (~> 2.8.0)
-    rspec-core (2.8.0)
-    rspec-expectations (2.8.0)
-      diff-lcs (~> 1.1.2)
-    rspec-mocks (2.8.0)
-    rspec-rails (2.8.1)
+    rspec (2.9.0)
+      rspec-core (~> 2.9.0)
+      rspec-expectations (~> 2.9.0)
+      rspec-mocks (~> 2.9.0)
+    rspec-core (2.9.0)
+    rspec-expectations (2.9.0)
+      diff-lcs (~> 1.1.3)
+    rspec-mocks (2.9.0)
+    rspec-rails (2.9.0)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
-      rspec (~> 2.8.0)
+      rspec (~> 2.9.0)
     ruby-debug (0.10.4)
       columnize (>= 0.1)
       ruby-debug-base (~> 0.10.4.0)
