@@ -37,6 +37,8 @@ When dealing with embedded objects and relations, you should use embedded hashes
     }      
   }
 ```
+
+In embedded object, id may change, however import_id and/or record_reference will always remain unchanged.
   
 example vector:
 
