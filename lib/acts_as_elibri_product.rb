@@ -70,14 +70,17 @@ module ActsAsElibriProduct
       if change.is_a?(Symbol) && traverse_vector[change]
         write_attribute(traverse_vector[change], product_updated.send(change))
       elsif change.is_a?(Hash) && traverse_vector[change] && traverse_vector[change.keys.first]
-        read_attribute(traverse_vector[change.keys.first]).send("#{traverse_vector[change[keys.first]]}=", product_updated.send(change.keys.first).send(change[keys.first]))
+        #czy to jest uzywane?
+    #    read_attribute(traverse_vector[change.keys.first]).send("#{traverse_vector[change[keys.first]]}=", product_updated.send(change.keys.first).send(change[keys.first]))
       elsif false #TODO: obsluga arrayow
         
       end
     details[:deleted].each do |deleted|
       if traverse_vector[deleted.keys.first] && traverse_vector[deleted.keys.first].keys.first       
-        deleted.values.first.each do |del|
-          self.send(traverse_vector[deleted.keys.first].keys.first).find { |x| x.send(traverse_vector[deleted.keys.first].values.first[:id]) == del.id }.delete
+        deleted.each_pair do |dele_key, dele|
+          dele.each do |del|
+            self.send(traverse_vector[dele_key].keys.first).each { |x| x if x.send(traverse_vector[dele_key].values.first[:id]) == del.id }.compact.each(&:delete)
+          end
         end
       end
     end
@@ -101,7 +104,7 @@ end
   
   def self.set_objects_from_array(elibri_object_name, db_object_name, object_traverse_vector, elibri_objects, db_product)
     if elibri_objects.is_a?(Array)
-      elibri_objects.each do |elibri_object|
+      elibri_objects.first.tap do |elibri_object|
         db_product.send(db_object_name).build.tap do |inner_object|
       #    db_product.send
           object_traverse_vector.each_pair do |k, v|

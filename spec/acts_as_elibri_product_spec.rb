@@ -4,7 +4,7 @@ require 'spec_helper'
 $VERBOSE = nil
 
 describe ActsAsElibriProduct do
-=begin
+
   it "should create product when given new xml with contributor" do
     Product.count.should eq(0)
     book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :contributors => [Elibri::XmlMocks::Examples.contributor_mock])
@@ -112,7 +112,7 @@ describe ActsAsElibriProduct do
     Product.find(:first, :conditions => {:record_reference => 'abcd'}).contributors.count.should eq(1)
     Product.find(:first, :conditions => {:record_reference => 'abcde'}).contributors.count.should eq(1)
   end
-=end  
+ 
   it "should create and update two products from xml containing two products with description" do
     Product.count.should eq(0)
     description = Elibri::XmlMocks::Examples.description_mock(:text_author => 'Mickiewicz', :artificial_id => 123)
@@ -146,7 +146,6 @@ describe ActsAsElibriProduct do
     Product.count.should eq(2)
     Product.find(:first, :conditions => {:record_reference => 'abcd'}).isbn.should eq('9876543210')
     Product.find(:first, :conditions => {:record_reference => 'abcde'}).isbn.should eq('1234567890')
-    debugger
     ProductText.count.should eq(2)
     Product.find(:first, :conditions => {:record_reference => 'abcd'}).product_texts.first.text_author.should eq("Orwell")
     Product.find(:first, :conditions => {:record_reference => 'abcde'}).product_texts.first.text_author.should eq("Prus")
