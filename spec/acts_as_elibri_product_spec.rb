@@ -153,4 +153,39 @@ describe ActsAsElibriProduct do
     Product.find(:first, :conditions => {:record_reference => 'abcde'}).product_texts.count.should eq(1)
   end
   
+  it "should create product when given new xml with imprint" do
+    Product.count.should eq(0)
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :imprint => Elibri::XmlMocks::Examples.imprint_mock(:name => 'Helion'))
+    book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
+    product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(book_xml).products.first
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.first.record_reference.should eq("abcd")
+    Product.count.should eq(1)
+    Product.first.imprint.name.should eq("Helion")
+    Imprint.count.should eq(1)
+  end
+  
+  it "should create and update product when given new xml with imprint" do
+    Product.count.should eq(0)
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :imprint => Elibri::XmlMocks::Examples.imprint_mock(:name => 'Helion'))
+    book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
+    product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(book_xml).products.first
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.first.record_reference.should eq("abcd")
+    Product.count.should eq(1)
+    Product.first.imprint.name.should eq("Helion")
+    Imprint.count.should eq(1)
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :imprint => Elibri::XmlMocks::Examples.imprint_mock(:name => 'GREG'))
+    book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
+    product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(book_xml).products.first
+    lambda do
+      Product.batch_create_or_update_from_elibri(book_xml)
+    end.should_not change(Imprint.first, :created_at)
+    Product.first.record_reference.should eq("abcd")
+    Product.count.should eq(1)
+    Product.first.imprint.name.should eq("GREG")
+    Imprint.count.should eq(1)
+  end
+
+  
 end
