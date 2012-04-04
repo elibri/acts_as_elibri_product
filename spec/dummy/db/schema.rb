@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120330183626) do
+ActiveRecord::Schema.define(:version => 20120404164433) do
 
   create_table "contributors", :force => true do |t|
     t.integer  "import_id"
@@ -27,6 +27,13 @@ ActiveRecord::Schema.define(:version => 20120330183626) do
     t.text     "biography"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+  end
+
+  create_table "imprints", :force => true do |t|
+    t.integer  "product_id"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "product_texts", :force => true do |t|

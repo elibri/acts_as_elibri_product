@@ -24,3 +24,10 @@ end
 
 
 Bundler::GemHelper.install_tasks
+
+desc "Running specs"
+task :spec do |t|
+  exec "cd spec/ && bundle exec rspec acts_as_elibri_product_spec.rb"
+end
+
+task :default => ["spec"]

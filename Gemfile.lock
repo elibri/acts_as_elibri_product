@@ -9,18 +9,19 @@ GIT
       elibri_onix_dict
       mocha
 
-PATH
-  remote: .
-  specs:
-    acts_as_elibri_product (0.0.1)
-      rails (~> 3.2.0)
-
-PATH
-  remote: /Users/esse/work/gildia/elibri_xml_versions
+GIT
+  remote: https://github.com/elibri/elibri_xml_versions.git
+  revision: 5a8afcbd59847b317009b2a3eb71e4c8df539173
   specs:
     elibri_xml_versions (0.1.0)
       elibri_api_client
       elibri_onix_dict
+
+PATH
+  remote: .
+  specs:
+    acts_as_elibri_product (0.1.0)
+      rails (~> 3.2.0)
 
 GEM
   remote: http://rubygems.org/

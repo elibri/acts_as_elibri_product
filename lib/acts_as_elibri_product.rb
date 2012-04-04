@@ -118,8 +118,7 @@ end
         end
       end
     else
-      db_product.send(db_object_name).tap do |inner_object|
-        inner_object = db_product.send(db_object_name).build if inner_object.is_a?(Array) 
+      db_product.send("build_#{db_object_name}").tap do |inner_object|
     #    db_product.send
         object_traverse_vector.each_pair do |k, v|
           if v.is_a?(Hash)

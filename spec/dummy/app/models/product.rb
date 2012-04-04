@@ -41,6 +41,7 @@ class Product < ActiveRecord::Base
   with_options :autosave => true, :dependent => :destroy do |product|
     product.has_many :contributors
     product.has_many :product_texts
+    product.has_one :imprint
   end
 
   attr_accessible :isbn, :title, :full_title, :trade_title, :original_title, :publication_year,
@@ -92,6 +93,11 @@ class Product < ActiveRecord::Base
              :author => :text_author,
              :source_title => :source_title,
              :source_url => :resource_link
+           }
+         },
+         :imprint => { #Jak się nazywa w eLibri
+           :imprint => { #Jak się nazywa w naszej bazie
+             :name => :name #przeksztalcenie nazw atrybutow elibri => nasza baza
            }
          }
          
