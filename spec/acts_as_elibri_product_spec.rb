@@ -169,7 +169,6 @@ describe ActsAsElibriProduct do
     Product.count.should eq(0)
     book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :imprint => Elibri::XmlMocks::Examples.imprint_mock(:name => 'Helion'))
     book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
-    product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(book_xml).products.first
     Product.batch_create_or_update_from_elibri(book_xml)
     Product.first.record_reference.should eq("abcd")
     Product.count.should eq(1)
@@ -185,6 +184,34 @@ describe ActsAsElibriProduct do
     Product.count.should eq(1)
     Product.first.imprint.name.should eq("GREG")
     Imprint.count.should eq(1)
+  end
+  
+  it "should create and update product when given new xml containing two products - both with imprint" do
+    Product.count.should eq(0)
+    imprint_1 = Elibri::XmlMocks::Examples.imprint_mock(:name => 'Helion')
+    imprint_2 = Elibri::XmlMocks::Examples.imprint_mock(:name => 'GREG')
+    imprint_3 = Elibri::XmlMocks::Examples.imprint_mock(:name => 'Czarna Owca')
+    imprint_4 = Elibri::XmlMocks::Examples.imprint_mock(:name => 'WNT')
+    book_1 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :imprint => imprint_1)
+    book_2 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcde', :imprint => imprint_2)  
+    book_array = [book_1, book_2]  
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_array).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.count.should eq(2)
+    Product.find(:first, :conditions => {:record_reference => 'abcd'}).imprint.name.should eq('Helion')
+    Product.find(:first, :conditions => {:record_reference => 'abcde'}).imprint.name.should eq('GREG')
+    Imprint.count.should eq(2)
+    book_1 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :imprint => imprint_3)
+    book_2 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcde', :imprint => imprint_4)  
+    book_array = [book_1, book_2]  
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_array).to_s
+    lambda do
+      Product.batch_create_or_update_from_elibri(book_xml)
+    end.should_not change(Imprint.first, :created_at)
+    Product.count.should eq(2)
+    Product.find(:first, :conditions => {:record_reference => 'abcd'}).imprint.name.should eq('Czarna Owca')
+    Product.find(:first, :conditions => {:record_reference => 'abcde'}).imprint.name.should eq('WNT')
+    Imprint.count.should eq(2)
   end
 
   
