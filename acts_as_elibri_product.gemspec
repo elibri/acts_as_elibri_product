@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = ActsAsElibriProduct::VERSION
   s.authors     = ["Piotr Szmielew"]
   s.email       = ["p.szmielew@ava.waw.pl"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of ActsAsElibriProduct."
-  s.description = "TODO: Description of ActsAsElibriProduct."
+  s.homepage    = "http://elibri.com.pl"
+  s.summary     = "Easy addition of eLibri based product to your application"
+  s.description = "Gem designed to allow easy addition of eLibri based product to your application. Currently only tested under REE."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
