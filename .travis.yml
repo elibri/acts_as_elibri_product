@@ -1,0 +1,7 @@
+language: ruby
+rvm:
+  - ree
+notifications:
+  email:
+    - p.szmielew@ava.waw.pl
+    - tomek@gildia.pl
