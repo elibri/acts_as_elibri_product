@@ -14,7 +14,7 @@ Usage guide:
 
 * Add `acts_as_elibri_product TRAVERSE_VECTOR` to your product_model
 
-* Schedule (for example in cron) regular calls to `ProductModel.batch_create_or_update_from_elibri` providing `xml_string` from eLibri API as an argument.
+* Schedule (for example in cron) regular calls to `ProductModel.batch_create_or_update_from_elibri` providing `xml_string` from eLibri API as an argument, or providing `Elibri::ONIX::Release_3_0::ONIXMessage` from eLibri API as an argument.
 
 TRAVERSE_VECTOR is a structure containing information about mapping elibri arguments to your model arguments. Attributes not specified here, will be ignored during data import.
 

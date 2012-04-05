@@ -45,7 +45,11 @@ module ActsAsElibriProduct
     end
     
     def batch_create_or_update_from_elibri(xml_string)
-      recreated_products = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(xml_string)
+      if xml_string.is_a?(Elibri::ONIX::Release_3_0::ONIXMessage)
+        recreated_products = xml_string
+      else
+        recreated_products = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(xml_string)
+      end
       recreated_products.products.each do |product|
         xml = product.to_xml.to_s
         dialect = product.elibri_dialect
