@@ -16,5 +16,5 @@ gem "jquery-rails"
 # To use debugger
 gem 'ruby-debug'
 
-gem "elibri_onix_mocks", :git => 'https://github.com/elibri/elibri_onix_mocks.git'
-gem "elibri_xml_versions", :git => 'https://github.com/elibri/elibri_xml_versions.git'
+#gem "elibri_onix_mocks", :git => 'https://github.com/elibri/elibri_onix_mocks.git'
+#gem "elibri_xml_versions", :git => 'https://github.com/elibri/elibri_xml_versions.git'
