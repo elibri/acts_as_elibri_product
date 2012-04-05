@@ -1,4 +1,3 @@
-require 'elibri_onix_mocks'
 require 'elibri_xml_versions'
 require 'ostruct'
 

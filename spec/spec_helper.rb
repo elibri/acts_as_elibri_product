@@ -3,6 +3,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require "dummy/config/environment"
 require 'rspec/rails'
 require 'rspec/autorun'
+require 'elibri_onix_mocks'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
