@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.summary     = "Easy addition of eLibri based product to your application"
   s.description = "Gem designed to allow easy addition of eLibri based product to your application. Currently only tested under REE."
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "~> 3.2.0"
