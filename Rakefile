@@ -27,7 +27,7 @@ Bundler::GemHelper.install_tasks
 
 desc "Running specs"
 task :spec do |t|
-  exec "cd spec/ && bundle exec rspec acts_as_elibri_product_spec.rb"
+  exec "cd spec/dummy && bundle exec rake db:create:all && bundle exec rake db:migrate && bundle exec rake db:test:prepare && cd .. && bundle exec rspec acts_as_elibri_product_spec.rb.rb"
 end
 
 task :default => ["spec"]
