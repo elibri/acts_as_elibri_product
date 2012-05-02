@@ -4,6 +4,20 @@ require 'spec_helper'
 $VERBOSE = nil
 
 describe ActsAsElibriProduct do
+  
+  it "should raise an exception when given product with empty old_xml" do
+    Product.count.should eq(0)
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :contributors => [Elibri::XmlMocks::Examples.contributor_mock])
+    book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
+    product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(book_xml).products.first
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.first.record_reference.should eq("abcd")
+    Product.count.should eq(1)
+    Product.first.contributors.count.should eq(1)
+    Contributor.count.should eq(1)
+    Product.first.update_attribute(:old_xml, nil)
+    lambda { Product.batch_create_or_update_from_elibri(book_xml) }.should raise_error
+  end
 
   it "should create product when given new xml with contributor" do
     Product.count.should eq(0)

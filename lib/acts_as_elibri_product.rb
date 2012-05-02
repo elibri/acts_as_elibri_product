@@ -65,6 +65,9 @@ module ActsAsElibriProduct
   end
   
   def update_product_from_elibri(new_xml)
+    if (read_attribute :old_xml).blank?
+      raise "Empty old_xml column on product"
+    end
     product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(read_attribute :old_xml).products.first
     product_updated = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(new_xml).products.first
     elibri_xml_versions = Elibri::XmlVersions.new(product, product_updated)
