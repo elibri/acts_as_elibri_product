@@ -227,6 +227,27 @@ describe ActsAsElibriProduct do
     Product.find(:first, :conditions => {:record_reference => 'abcde'}).imprint.name.should eq('WNT')
     Imprint.count.should eq(2)
   end
+  
+  it "should change author data when author changes" do
+    author = Elibri::XmlMocks::Examples.contributor_mock(:id => 2167055520)
+    author_2 = Elibri::XmlMocks::Examples.contributor_mock(:last_name => 'Waza', :id => 2167055520)
+    book_1 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'fdb8fa072be774d97a97', :contributors => [author])
+    book_2 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'fdb8fa072be774d97a97', :contributors => [author_2])
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_1).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.first.record_reference.should eq("fdb8fa072be774d97a97")
+    Product.count.should eq(1)
+    Product.first.contributors.count.should eq(1)
+    Product.first.contributors.first.first_name.should eq("Henryk")
+    Product.first.contributors.first.last_name.should eq("Sienkiewicz")
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_2).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.first.record_reference.should eq("fdb8fa072be774d97a97")
+    Product.count.should eq(1)
+    Product.first.contributors.count.should eq(1)
+    Product.first.contributors.first.first_name.should eq("Henryk")
+    Product.first.contributors.first.last_name.should eq("Waza")
+  end
 
   
 end
