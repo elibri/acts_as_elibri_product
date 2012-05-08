@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    acts_as_elibri_product (0.1.4)
+    acts_as_elibri_product (0.1.5)
       elibri_xml_versions
-      rails (~> 3.2.0)
+      rails
 
 GEM
   remote: http://rubygems.org/
@@ -49,7 +49,7 @@ GEM
       i18n
       roxml (= 3.1.3)
     elibri_onix_dict (0.0.12)
-    elibri_onix_mocks (0.1.0)
+    elibri_onix_mocks (0.1.2)
       activesupport
       builder
       elibri_api_client
