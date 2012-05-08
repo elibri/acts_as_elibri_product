@@ -65,6 +65,9 @@ module ActsAsElibriProduct
   end
   
   def update_product_from_elibri(new_xml)
+    if (read_attribute :old_xml).blank?
+      raise "Empty old_xml column on product"
+    end
     product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(read_attribute :old_xml).products.first
     product_updated = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(new_xml).products.first
     elibri_xml_versions = Elibri::XmlVersions.new(product, product_updated)
@@ -74,8 +77,17 @@ module ActsAsElibriProduct
         write_attribute(traverse_vector[change], product_updated.send(change))
       elsif change.is_a?(Hash) && traverse_vector[change.keys.first]        
         change.values.first.each do |elibri_attrib|
-          db_attrib = traverse_vector[change.keys.first].values.first[elibri_attrib]
-          if db_attrib #is there mapping?
+          if elibri_attrib.is_a? Hash
+            elibri_attrib.each_pair do |k,v|
+              db_attrib = traverse_vector[change.keys.first].values.first[v]
+              if db_attrib #found in mapping
+                object = self.send(traverse_vector[change.keys.first].keys.first).find { |x| x.import_id == k }
+                elibri_object = product_updated.send(change.keys.first).find { |x| x.id == k }
+                object.send(:write_attribute, db_attrib, elibri_object.send(v))
+              end
+            end
+          else
+            db_attrib = traverse_vector[change.keys.first].values.first[elibri_attrib]
             object = self.send(traverse_vector[change.keys.first].keys.first)
             elibri_object = product_updated.send(change.keys.first)
             object.send(:write_attribute, db_attrib, elibri_object.send(elibri_attrib))

@@ -4,6 +4,20 @@ require 'spec_helper'
 $VERBOSE = nil
 
 describe ActsAsElibriProduct do
+  
+  it "should raise an exception when given product with empty old_xml" do
+    Product.count.should eq(0)
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :contributors => [Elibri::XmlMocks::Examples.contributor_mock])
+    book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
+    product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(book_xml).products.first
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.first.record_reference.should eq("abcd")
+    Product.count.should eq(1)
+    Product.first.contributors.count.should eq(1)
+    Contributor.count.should eq(1)
+    Product.first.update_attribute(:old_xml, nil)
+    lambda { Product.batch_create_or_update_from_elibri(book_xml) }.should raise_error
+  end
 
   it "should create product when given new xml with contributor" do
     Product.count.should eq(0)
@@ -212,6 +226,27 @@ describe ActsAsElibriProduct do
     Product.find(:first, :conditions => {:record_reference => 'abcd'}).imprint.name.should eq('Czarna Owca')
     Product.find(:first, :conditions => {:record_reference => 'abcde'}).imprint.name.should eq('WNT')
     Imprint.count.should eq(2)
+  end
+  
+  it "should change author data when author changes" do
+    author = Elibri::XmlMocks::Examples.contributor_mock(:id => 2167055520)
+    author_2 = Elibri::XmlMocks::Examples.contributor_mock(:last_name => 'Waza', :id => 2167055520)
+    book_1 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'fdb8fa072be774d97a97', :contributors => [author])
+    book_2 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'fdb8fa072be774d97a97', :contributors => [author_2])
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_1).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.first.record_reference.should eq("fdb8fa072be774d97a97")
+    Product.count.should eq(1)
+    Product.first.contributors.count.should eq(1)
+    Product.first.contributors.first.first_name.should eq("Henryk")
+    Product.first.contributors.first.last_name.should eq("Sienkiewicz")
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_2).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.first.record_reference.should eq("fdb8fa072be774d97a97")
+    Product.count.should eq(1)
+    Product.first.contributors.count.should eq(1)
+    Product.first.contributors.first.first_name.should eq("Henryk")
+    Product.first.contributors.first.last_name.should eq("Waza")
   end
 
   
