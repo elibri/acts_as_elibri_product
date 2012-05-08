@@ -75,9 +75,11 @@ module ActsAsElibriProduct
       elsif change.is_a?(Hash) && traverse_vector[change.keys.first]        
         change.values.first.each do |elibri_attrib|
           db_attrib = traverse_vector[change.keys.first].values.first[elibri_attrib]
-          object = self.send(traverse_vector[change.keys.first].keys.first)
-          elibri_object = product_updated.send(change.keys.first)
-          object.send(:write_attribute, db_attrib, elibri_object.send(elibri_attrib))
+          if db_attrib #is there mapping?
+            object = self.send(traverse_vector[change.keys.first].keys.first)
+            elibri_object = product_updated.send(change.keys.first)
+            object.send(:write_attribute, db_attrib, elibri_object.send(elibri_attrib))
+          end
         end
     #    read_attribute(traverse_vector[change.keys.first]).send("#{traverse_vector[change[keys.first]]}=", product_updated.send(change.keys.first).send(change[keys.first]))
       else
