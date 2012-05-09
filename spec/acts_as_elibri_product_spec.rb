@@ -64,6 +64,16 @@ describe ActsAsElibriProduct do
     Product.all.map(&:record_reference).should include('abcd')
     Product.all.map(&:record_reference).should include('abcde')
   end
+
+  it "should create products from xml and change data with lambda" do
+    Product.count.should eq(0)
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :title => 'UML')
+    book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.count.should eq(1)
+    Product.first.title.should eq("UML_test")
+    Product.first.record_reference.should eq("abcd")
+  end
   
   it "should create and update two products from xml containing two products" do
     Product.count.should eq(0)

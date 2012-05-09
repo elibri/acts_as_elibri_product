@@ -28,6 +28,8 @@ module ActsAsElibriProduct
         elsif v.is_a?(Hash)
           object = db_product.send(v.keys.first)
           ActsAsElibriProduct.set_objects_from_array(k, v.keys.first, v.values.first, product.send(k), db_product) if product.send(k)
+        elsif v.is_a?(Array)
+          db_product.send(:write_attribute, v[0], v[1].call(product.send(k)))
         end
       end
       db_product.old_xml = xml_string

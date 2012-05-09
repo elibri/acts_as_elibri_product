@@ -26,6 +26,17 @@ Structure is build using hashes, general rule is:
 }
 ```
 
+Also you can use lambda in this construction, if you want to do something with attribute (for example downcase it).
+In this case, you should use array, where first element is name of elibri attribute and second element is lambda that describes what to do with it.
+
+Example:
+```ruby
+{
+  :title => [:title, lambda {|x| Logger.info("changing title"); return "#{x}_test"}]
+} 
+
+Important thing is that lambda need to take exactly one argument, and need to return final value of attribute to write into database.
+
 When dealing with embedded objects and relations, you should use embedded hashes:  
 
 ```ruby

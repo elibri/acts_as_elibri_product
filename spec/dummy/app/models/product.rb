@@ -52,7 +52,7 @@ class Product < ActiveRecord::Base
   #po lewej stronie to co w elibri, po prawej co ma być w naszej bazie               
   acts_as_elibri_product :record_reference => :record_reference,
          :isbn13 => :isbn,
-         :title => :title,
+         :title => [:title, lambda { |x| "#{x}_test" }],
          :full_title => :full_title,
          :trade_title => :trade_title,
          :original_title => :original_title,
