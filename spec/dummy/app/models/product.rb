@@ -70,11 +70,11 @@ class Product < ActiveRecord::Base
   #po lewej stronie to co w elibri, po prawej co ma być w naszej bazie               
   acts_as_elibri_product :record_reference => :record_reference, #warto indeks zalozyc na tym
          :isbn13 => :isbn,
-         :title => [:title, lambda { |x| "#{x}_test" }],
+         :title => [:title, lambda { |z, x| "#{x}_test" }],
          :full_title => :full_title,
          :trade_title => :trade_title,
          :original_title => :original_title,
-         :number_of_pages => [nil, lambda { |x| Product.tester = x}],
+         :number_of_pages => [nil, lambda { |z, x| Product.tester = x}],
          :duration => :duration,
          :width => :width,
          :height => :height,

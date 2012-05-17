@@ -44,9 +44,9 @@ module ActsAsElibriProduct
           ActsAsElibriProduct.set_objects_from_array(k, v.keys.first, v.values.first, product.send(k), db_product) if product.send(k)
         elsif v.is_a?(Array)
           if v[0].nil?
-            v[1].call(product.send(k))
+            v[1].call(db_product, product.send(k))
           else
-            db_product.send(:write_attribute, v[0], v[1].call(product.send(k)))
+            db_product.send(:write_attribute, v[0], v[1].call(db_product, product.send(k)))
           end
         end
       end
@@ -97,9 +97,9 @@ module ActsAsElibriProduct
         if traverse_vector[change].is_a?(Array)
           next unless check_policy_chain(self, :product, traverse_vector[change], self.send(traverse_vector[change][0]), product_updated.send(change))
           if traverse_vector[change][0].nil?
-            traverse_vector[change][1].call(product_updated.send(change))
+            traverse_vector[change][1].call(self, product_updated.send(change))
           else
-            write_attribute(traverse_vector[change][0], traverse_vector[change][1].call(product_updated.send(change)))
+            write_attribute(traverse_vector[change][0], traverse_vector[change][1].call(self, product_updated.send(change)))
           end
         else
           next unless check_policy_chain(self, :product, traverse_vector[change], self.send(traverse_vector[change]), product_updated.send(change))
@@ -116,9 +116,9 @@ module ActsAsElibriProduct
                 if v.is_a?(Array)
                   next unless check_policy_chain(self, traverse_vector[change.keys.first].keys.first, db_attrib, object.send(db_attrib), elibri_object.send(v[0]))
                   if v[0].nil?
-                    v[1].call(elibri_object.send(v[0]))
+                    v[1].call(elibri_object.send(object, v[0]))
                   else
-                    object.send(:write_attribute, db_attrib, v[1].call(elibri_object.send(v[0])))
+                    object.send(:write_attribute, db_attrib, v[1].call(object, elibri_object.send(v[0])))
                   end
                 else
                   next unless check_policy_chain(self, traverse_vector[change.keys.first].keys.first, db_attrib, object.send(db_attrib), elibri_object.send(v))

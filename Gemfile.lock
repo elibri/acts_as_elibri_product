@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    acts_as_elibri_product (0.2.0)
+    acts_as_elibri_product (0.2.1)
       elibri_xml_versions
       rails
 

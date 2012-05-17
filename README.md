@@ -32,16 +32,16 @@ In this case, you should use array, where first element is name of elibri attrib
 Example:
 ```ruby
 {
-  :title => [:title, lambda {|x| Logger.info("changing title"); return "#{x}_test"}]
+  :title => [:title, lambda {|product, value| Logger.info("changing title"); return "#{x}_test"}]
 } 
 
-Important thing is that lambda need to take exactly one argument, and need to return final value of attribute to write into database.
+Important thing is that lambda need to take exactly two arguments (first one will be product that are updating / creating right now, second will be value of field), and need to return final value of attribute to write into database.
 Also very important thing is that lambdas are now supported only on first level of vector (not in embedded hashes).
 
 If you want to use lambda, but don't write anything to database, you should use nil as first attribute in array. For example:
 ```ruby
 {
- :title => [nil, lambda {|x| Logger.info("changing title"); return "#{x}_test"}]
+ :title => [nil, lambda {|product, value| Logger.info("changing title") } ]
 }
 
 When dealing with embedded objects and relations, you should use embedded hashes:  
