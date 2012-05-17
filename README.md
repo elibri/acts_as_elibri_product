@@ -105,3 +105,47 @@ example vector:
  }
 }
 ```
+
+Also if you want to check for some particular changes in object - you can use policy chain.
+
+```
+policy_chain << PolicyObject
+policy_chain << lambda
+```
+
+PolicyObject must implement class method call, which take four arguments:
+
+* object is symbol of object that inside which attribute is changing - it should be our name, not elibri one, for example on main level it would :product, inside contributors it will be :contributors etc.
+
+* attribute is symbol of attribute that will change - it should be our name, not elibri one
+
+* pre - value of attribute before potential update
+
+* post - value of attribute after potential update
+
+Also policy must return one of two values - true (if allow of changing an attribute) or false (if attribute should remain unchanged). You can implement notification etc inside Policy, when attribute is discarded - it's up to you.
+
+example of Policy (stub):
+```ruby
+module Policy #module is optional - however it is good practice to keep all policies in Policy module, and in subdirectory inside lib
+  class Stub
+  
+    def self.call(object, attribute, pre, post)
+      ### Add policy body here
+      return true
+    end
+  
+  end
+end
+
+example of adding policy lambda:
+```ruby
+policy_chain << lambda do |object, attribute, pre, post|
+   if object == :product
+     if attribute == :price_amount
+       return false unless pre == post #won't allow change of product price
+     end
+   end
+   return true
+ end
+```

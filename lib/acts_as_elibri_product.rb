@@ -19,6 +19,20 @@ module ActsAsElibriProduct
       @@traverse_vector = traverse_vector
     end
     
+    @@policy_chain = []
+    
+    def policy_chain
+      @@policy_chain
+      ### policy musi przyjmowac cztery argumenty -> nazwa obiektu (jesli main level to product po prostu), nazwa atrybutu, wartosc przed, wartosc po
+    end
+    
+    def validate_policy_chain
+      @@policy_chain.each do |policy|
+        raise "Policy #{policy} don't respond to call method" unless policy.respond_to? :call
+      end
+      return true
+    end
+    
     def create_from_elibri(xml_string)
       product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(xml_string).products.first
       db_product = self.new
@@ -76,6 +90,7 @@ module ActsAsElibriProduct
     details = elibri_xml_versions.diff
     details[:changes].each do |change|
       if change.is_a?(Symbol) && traverse_vector[change]
+        next unless check_policy_chain(self, :product, traverse_vector[change], self.send(traverse_vector[change]), product_updated.send(change))
         write_attribute(traverse_vector[change], product_updated.send(change))
       elsif change.is_a?(Hash) && traverse_vector[change.keys.first]        
         change.values.first.each do |elibri_attrib|
@@ -85,6 +100,7 @@ module ActsAsElibriProduct
               if db_attrib #found in mapping
                 object = self.send(traverse_vector[change.keys.first].keys.first).find { |x| x.import_id == k }
                 elibri_object = product_updated.send(change.keys.first).find { |x| x.id == k }
+                next unless check_policy_chain(self, traverse_vector[change.keys.first].keys.first, db_attrib, object.send(db_attrib), elibri_object.send(v))
                 object.send(:write_attribute, db_attrib, elibri_object.send(v))
               end
             end
@@ -92,6 +108,7 @@ module ActsAsElibriProduct
             db_attrib = traverse_vector[change.keys.first].values.first[elibri_attrib]
             object = self.send(traverse_vector[change.keys.first].keys.first)
             elibri_object = product_updated.send(change.keys.first)
+            next unless check_policy_chain(self, traverse_vector[change.keys.first].keys.first, db_attrib, object.send(db_attrib), elibri_object.send(elibri_attrib))            
             object.send(:write_attribute, db_attrib, elibri_object.send(elibri_attrib))
           end
         end
@@ -124,6 +141,10 @@ end
   
   def traverse_vector
     ActsAsElibriProduct::ClassMethods.traverse_vector
+  end
+  
+  def check_policy_chain(product, object, attribute, pre, post)
+    product.class.policy_chain.all? { |policy| policy.call(object, attribute, pre, post) }
   end
   
   def self.set_objects_from_array(elibri_object_name, db_object_name, object_traverse_vector, elibri_objects, db_product)

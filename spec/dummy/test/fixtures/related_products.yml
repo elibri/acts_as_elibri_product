@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  product_id: 1
+  related_record_reference: MyString
+  onix_code: MyString
+
+two:
+  product_id: 1
+  related_record_reference: MyString
+  onix_code: MyString

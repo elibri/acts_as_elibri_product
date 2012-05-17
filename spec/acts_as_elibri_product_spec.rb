@@ -258,6 +258,38 @@ describe ActsAsElibriProduct do
     Product.first.contributors.first.first_name.should eq("Henryk")
     Product.first.contributors.first.last_name.should eq("Waza")
   end
+  
+  it "policy_chain should not allow to update of cover_price (price_amount)" do
+    book_1 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :price_amount => 25)
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_1).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.first.record_reference.should eq("abcd")
+    Product.count.should eq(1)
+    Product.first.price_amount.should eq("25.0")
+    book_1 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :price_amount => 30)
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_1).to_s  
+    Product.batch_create_or_update_from_elibri(book_xml)  
+    Product.first.price_amount.should eq("25.0")
+  end
+  
+  it "policy_chain should not allow to update of contributor inside product when changing name from Adam to Adas" do
+    author = Elibri::XmlMocks::Examples.contributor_mock(:last_name => 'Adam', :id => 2167055520)
+    book_1 = Elibri::XmlMocks::Examples.book_example(:contributors => [author], :record_reference => 'abcd')
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_1).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.count.should eq(1)
+    Product.first.contributors.count.should eq(1)
+    Contributor.count.should eq(1)
+    Contributor.first.last_name.should eq('Adam')
+    author = Elibri::XmlMocks::Examples.contributor_mock(:last_name => 'Adas', :id => 2167055520)
+    book_1 = Elibri::XmlMocks::Examples.book_example(:contributors => [author], :record_reference => 'abcd')
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_1).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)  
+    Product.count.should eq(1)
+    Product.first.contributors.count.should eq(1)
+    Contributor.count.should eq(1)
+    Contributor.first.last_name.should eq('Adam')
+  end
 
   
 end

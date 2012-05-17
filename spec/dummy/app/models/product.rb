@@ -42,6 +42,7 @@ class Product < ActiveRecord::Base
     product.has_many :contributors
     product.has_many :product_texts
     product.has_one :imprint
+    product.has_many :related_products
   end
 
   attr_accessible :isbn, :title, :full_title, :trade_title, :original_title, :publication_year,
@@ -50,7 +51,7 @@ class Product < ActiveRecord::Base
                   :price_amount, :vat, :current_state, :product_form, :old_xml
                   
   #po lewej stronie to co w elibri, po prawej co ma być w naszej bazie               
-  acts_as_elibri_product :record_reference => :record_reference,
+  acts_as_elibri_product :record_reference => :record_reference, #warto indeks zalozyc na tym
          :isbn13 => :isbn,
          :title => [:title, lambda { |x| "#{x}_test" }],
          :full_title => :full_title,
@@ -85,6 +86,12 @@ class Product < ActiveRecord::Base
              :biographical_note => :biography
            }
          },
+#         :related_products => {
+#           :related_products => {
+#             :record_reference => :related_record_reference,
+#             : => :onix_code
+#           }
+#         },
          :text_contents => { #Jak się nazywa w eLibri
            :product_texts => { #Jak się nazywa w naszej bazie
              :id => :import_id, #przeksztalcenie nazw atrybutow elibri => nasza baza
@@ -100,6 +107,18 @@ class Product < ActiveRecord::Base
              :name => :name #przeksztalcenie nazw atrybutow elibri => nasza baza
            }
          }
+         
+         policy_chain << lambda do |object, attribute, pre, post|  ### example of using lambda as a policy
+           if object == :product
+             if attribute == :price_amount
+               return false unless pre == post
+             end
+           end
+           return true
+         end
+         
+         policy_chain << Policy::Stub
+         policy_chain << Policy::Contributor ### example of using external class as a policy. order is important - they will be called in this particular order
          
   def self.batch_update(products, dialect)
     #products - response.onix.products dajemy tam wyzej
