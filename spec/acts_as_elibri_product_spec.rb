@@ -73,6 +73,25 @@ describe ActsAsElibriProduct do
     Product.count.should eq(1)
     Product.first.title.should eq("UML_test")
     Product.first.record_reference.should eq("abcd")
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :title => 'UML2')
+    book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.count.should eq(1)
+    Product.first.title.should eq("UML2_test")
+    Product.first.record_reference.should eq("abcd")
+  end
+  
+  it "should not set field number_of_pages from xml with lambda (but should call this lambda)" do
+    Product.count.should eq(0)
+    book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :number_of_pages => 125)
+    book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
+    Product.tester = 0
+    Product.tester.should eq(0)
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.tester.should eq(125)
+    Product.count.should eq(1)
+    Product.first.record_reference.should eq("abcd")
+    Product.first.number_of_pages.should eq(nil)
   end
   
   it "should create and update two products from xml containing two products" do

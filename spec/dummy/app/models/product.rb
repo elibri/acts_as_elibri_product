@@ -49,6 +49,23 @@ class Product < ActiveRecord::Base
                   :publication_month, :publication_day, :number_of_pages, :width, :height, 
                   :cover_type, :edition_statement, :audience_age_from, :audience_age_to, 
                   :price_amount, :vat, :current_state, :product_form, :old_xml
+  
+  @@tester = 0
+                  
+  def self.tester=(t)
+    @@tester = t
+  end
+  
+  def self.tester
+    @@tester
+  end
+  
+  HEIGHT_UNIT = 'mm'
+  WIDTH_UNIT = 'mm'
+  THICKNESS_UNIT = 'mm'
+  WEIGHT_UNIT = 'gr'
+  FILE_SIZE_UNIT = 'MB'
+  DURATION_UNIT = 'min'
                   
   #po lewej stronie to co w elibri, po prawej co ma być w naszej bazie               
   acts_as_elibri_product :record_reference => :record_reference, #warto indeks zalozyc na tym
@@ -57,7 +74,7 @@ class Product < ActiveRecord::Base
          :full_title => :full_title,
          :trade_title => :trade_title,
          :original_title => :original_title,
-         :number_of_pages => :number_of_pages,
+         :number_of_pages => [nil, lambda { |x| Product.tester = x}],
          :duration => :duration,
          :width => :width,
          :height => :height,

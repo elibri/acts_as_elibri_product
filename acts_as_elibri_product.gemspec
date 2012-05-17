@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails"
   s.add_dependency "elibri_xml_versions"
+
+  s.add_development_dependency "elibri_onix_generator"
   s.add_development_dependency "elibri_onix_mocks"
 
   s.add_development_dependency "rspec"

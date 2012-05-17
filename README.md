@@ -36,6 +36,13 @@ Example:
 } 
 
 Important thing is that lambda need to take exactly one argument, and need to return final value of attribute to write into database.
+Also very important thing is that lambdas are now supported only on first level of vector (not in embedded hashes).
+
+If you want to use lambda, but don't write anything to database, you should use nil as first attribute in array. For example:
+```ruby
+{
+ :title => [nil, lambda {|x| Logger.info("changing title"); return "#{x}_test"}]
+}
 
 When dealing with embedded objects and relations, you should use embedded hashes:  
 

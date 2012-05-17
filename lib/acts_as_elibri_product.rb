@@ -43,7 +43,11 @@ module ActsAsElibriProduct
           object = db_product.send(v.keys.first)
           ActsAsElibriProduct.set_objects_from_array(k, v.keys.first, v.values.first, product.send(k), db_product) if product.send(k)
         elsif v.is_a?(Array)
-          db_product.send(:write_attribute, v[0], v[1].call(product.send(k)))
+          if v[0].nil?
+            v[1].call(product.send(k))
+          else
+            db_product.send(:write_attribute, v[0], v[1].call(product.send(k)))
+          end
         end
       end
       db_product.old_xml = xml_string
@@ -90,8 +94,17 @@ module ActsAsElibriProduct
     details = elibri_xml_versions.diff
     details[:changes].each do |change|
       if change.is_a?(Symbol) && traverse_vector[change]
-        next unless check_policy_chain(self, :product, traverse_vector[change], self.send(traverse_vector[change]), product_updated.send(change))
-        write_attribute(traverse_vector[change], product_updated.send(change))
+        if traverse_vector[change].is_a?(Array)
+          next unless check_policy_chain(self, :product, traverse_vector[change], self.send(traverse_vector[change][0]), product_updated.send(change))
+          if traverse_vector[change][0].nil?
+            traverse_vector[change][1].call(product_updated.send(change))
+          else
+            write_attribute(traverse_vector[change][0], traverse_vector[change][1].call(product_updated.send(change)))
+          end
+        else
+          next unless check_policy_chain(self, :product, traverse_vector[change], self.send(traverse_vector[change]), product_updated.send(change))
+          write_attribute(traverse_vector[change], product_updated.send(change))
+        end
       elsif change.is_a?(Hash) && traverse_vector[change.keys.first]        
         change.values.first.each do |elibri_attrib|
           if elibri_attrib.is_a? Hash
@@ -100,8 +113,17 @@ module ActsAsElibriProduct
               if db_attrib #found in mapping
                 object = self.send(traverse_vector[change.keys.first].keys.first).find { |x| x.import_id == k }
                 elibri_object = product_updated.send(change.keys.first).find { |x| x.id == k }
-                next unless check_policy_chain(self, traverse_vector[change.keys.first].keys.first, db_attrib, object.send(db_attrib), elibri_object.send(v))
-                object.send(:write_attribute, db_attrib, elibri_object.send(v))
+                if v.is_a?(Array)
+                  next unless check_policy_chain(self, traverse_vector[change.keys.first].keys.first, db_attrib, object.send(db_attrib), elibri_object.send(v[0]))
+                  if v[0].nil?
+                    v[1].call(elibri_object.send(v[0]))
+                  else
+                    object.send(:write_attribute, db_attrib, v[1].call(elibri_object.send(v[0])))
+                  end
+                else
+                  next unless check_policy_chain(self, traverse_vector[change.keys.first].keys.first, db_attrib, object.send(db_attrib), elibri_object.send(v))
+                  object.send(:write_attribute, db_attrib, elibri_object.send(v))
+                end
               end
             end
           else
