@@ -123,7 +123,13 @@ class Product < ActiveRecord::Base
            :imprint => { #Jak się nazywa w naszej bazie
              :name => :name #przeksztalcenie nazw atrybutow elibri => nasza baza
            }
-         }
+         },
+         :front_cover => [
+           nil,
+           lambda do |product, cover_class|
+             product.send(:write_attribute, :cover_link, cover_class.link)
+           end
+           ] #wpisujemy link do okładki w pole
          
          policy_chain << lambda do |object, attribute, pre, post|  ### example of using lambda as a policy
            if object == :product

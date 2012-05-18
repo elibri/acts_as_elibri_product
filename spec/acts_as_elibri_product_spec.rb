@@ -309,6 +309,21 @@ describe ActsAsElibriProduct do
     Contributor.count.should eq(1)
     Contributor.first.last_name.should eq('Adam')
   end
+  
+  it "should create and update properly product with front_cover" do
+    attachment = Elibri::XmlMocks::Examples.product_attachment_mock(:file => Elibri::XmlMocks::Examples.paperclip_attachment_mock(:url => 'http://example.com/pic.jpg'))
+    book_1 = Elibri::XmlMocks::Examples.book_example(:attachments => [attachment], :record_reference => 'abcd')
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_1).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.count.should eq(1)
+    Product.first.cover_link.should eq('http://example.com/pic.jpg')
+    attachment = Elibri::XmlMocks::Examples.product_attachment_mock(:file => Elibri::XmlMocks::Examples.paperclip_attachment_mock(:url => 'http://example.com/pic2.jpg'))
+    book_1 = Elibri::XmlMocks::Examples.book_example(:attachments => [attachment], :record_reference => 'abcd')
+    book_xml = Elibri::ONIX::XMLGenerator.new(book_1).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.count.should eq(1)
+    Product.first.cover_link.should eq('http://example.com/pic2.jpg')
+  end
 
   
 end

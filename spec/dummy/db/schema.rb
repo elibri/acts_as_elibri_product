@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120516135649) do
+ActiveRecord::Schema.define(:version => 20120518092127) do
 
   create_table "contributors", :force => true do |t|
     t.integer  "import_id"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(:version => 20120516135649) do
     t.datetime "created_at",                           :null => false
     t.datetime "updated_at",                           :null => false
     t.text     "old_xml"
+    t.string   "cover_link"
   end
 
   create_table "related_products", :force => true do |t|

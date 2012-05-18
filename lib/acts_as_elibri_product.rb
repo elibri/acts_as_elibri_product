@@ -116,9 +116,9 @@ module ActsAsElibriProduct
                 if v.is_a?(Array)
                   next unless check_policy_chain(self, traverse_vector[change.keys.first].keys.first, db_attrib, object.send(db_attrib), elibri_object.send(v[0]))
                   if v[0].nil?
-                    v[1].call(elibri_object.send(object, v[0]))
+                    v[1].call(self, elibri_object.send(v[0]))
                   else
-                    object.send(:write_attribute, db_attrib, v[1].call(object, elibri_object.send(v[0])))
+                    object.send(:write_attribute, db_attrib, v[1].call(self, elibri_object.send(v[0])))
                   end
                 else
                   next unless check_policy_chain(self, traverse_vector[change.keys.first].keys.first, db_attrib, object.send(db_attrib), elibri_object.send(v))
@@ -127,11 +127,20 @@ module ActsAsElibriProduct
               end
             end
           else
-            db_attrib = traverse_vector[change.keys.first].values.first[elibri_attrib]
-            object = self.send(traverse_vector[change.keys.first].keys.first)
-            elibri_object = product_updated.send(change.keys.first)
-            next unless check_policy_chain(self, traverse_vector[change.keys.first].keys.first, db_attrib, object.send(db_attrib), elibri_object.send(elibri_attrib))            
-            object.send(:write_attribute, db_attrib, elibri_object.send(elibri_attrib))
+            if traverse_vector[change.keys.first].is_a?(Array)
+              next unless check_policy_chain(self, change.keys.first, elibri_attrib, product.send(change.keys.first).send(elibri_attrib), product_updated.send(change.keys.first).send(elibri_attrib))
+              if traverse_vector[change.keys.first][0].nil?
+                traverse_vector[change.keys.first][1].call(self, product_updated.send(change.keys.first))
+              else
+                ### TO BE IMPLEMENTED - not quite sure if this situation may and should happen
+              end
+            else
+              db_attrib = traverse_vector[change.keys.first].values.first[elibri_attrib]
+              object = self.send(traverse_vector[change.keys.first].keys.first)
+              elibri_object = product_updated.send(change.keys.first)
+              next unless check_policy_chain(self, traverse_vector[change.keys.first].keys.first, db_attrib, object.send(db_attrib), elibri_object.send(elibri_attrib))            
+              object.send(:write_attribute, db_attrib, elibri_object.send(elibri_attrib))
+            end
           end
         end
     #    read_attribute(traverse_vector[change.keys.first]).send("#{traverse_vector[change[keys.first]]}=", product_updated.send(change.keys.first).send(change[keys.first]))
