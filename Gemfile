@@ -14,7 +14,7 @@ gem "jquery-rails"
 # your gem to rubygems.org.
 
 # To use debugger
-gem 'ruby-debug'
+# gem 'ruby-debug'
 
 #gem "elibri_onix_mocks", :path => '/Users/esse/work/gildia/elibri_onix_mocks'
 #gem "elibri_xml_versions", :git => 'https://github.com/elibri/elibri_xml_versions.git'
