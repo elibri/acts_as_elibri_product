@@ -4,7 +4,7 @@ require 'spec_helper'
 $VERBOSE = nil
 
 describe ActsAsElibriProduct do
-  
+
   it "should raise an exception when given product with empty old_xml" do
     Product.count.should eq(0)
     book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :contributors => [Elibri::XmlMocks::Examples.contributor_mock])
@@ -323,6 +323,40 @@ describe ActsAsElibriProduct do
     Product.batch_create_or_update_from_elibri(book_xml)
     Product.count.should eq(1)
     Product.first.cover_link.should eq('http://example.com/pic2.jpg')
+  end
+  
+  it "should create related products properly for product" do
+    product = Elibri::XmlMocks::Examples.product_with_similars_mock
+    book_xml = Elibri::ONIX::XMLGenerator.new(product).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.count.should eq(1)
+    Product.first.related_products.count.should eq(2)
+    Product.first.related_products[0].related_record_reference.should eq('fdb8fa072be774d97a95')
+    Product.first.related_products[1].related_record_reference.should eq('fdb8fa072be774d97a98')
+  end
+
+  it "should create related products properly for product and later allow access to this products" do
+    product_1 = Elibri::XmlMocks::Examples.product_with_similars_mock
+    product_2 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'fdb8fa072be774d97a95', :title => 'UML_1')
+    product_3 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'fdb8fa072be774d97a98', :title => 'UML_2')
+    product_4 = Elibri::XmlMocks::Examples.book_example(:record_reference => 'fdb8fa072be774d97a80', :title => 'UML_3')
+    products = [product_1, product_2, product_3, product_4]
+    book_xml = Elibri::ONIX::XMLGenerator.new(products).to_s
+    Product.batch_create_or_update_from_elibri(book_xml)
+    Product.count.should eq(4)
+    main = Product.where(:record_reference => 'fdb8fa072be774d97a99').first
+    main.related_products.count.should eq(2)
+    main.related_products[0].related_record_reference.should eq('fdb8fa072be774d97a95')
+    main.related_products[1].related_record_reference.should eq('fdb8fa072be774d97a98')
+    main.related_products[0].object.title.should eq('UML_1_test')
+    main.related_products[1].object.title.should eq('UML_2_test')
+    main.related_products[0].onix_code.should eq('24')
+    main.related_products[1].onix_code.should eq('24')
+    main.related_products.objects.count.should eq(2)
+    main.related_products.objects[0].title.should eq('UML_1_test')
+    main.related_products.objects[1].title.should eq('UML_2_test')
+    main.related_products.objects[0].record_reference.should eq('fdb8fa072be774d97a95')
+    main.related_products.objects[1].record_reference.should eq('fdb8fa072be774d97a98')
   end
 
   

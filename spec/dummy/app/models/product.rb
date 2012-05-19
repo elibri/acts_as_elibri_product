@@ -103,12 +103,6 @@ class Product < ActiveRecord::Base
              :biographical_note => :biography
            }
          },
-#         :related_products => {
-#           :related_products => {
-#             :record_reference => :related_record_reference,
-#             : => :onix_code
-#           }
-#         },
          :text_contents => { #Jak się nazywa w eLibri
            :product_texts => { #Jak się nazywa w naszej bazie
              :id => :import_id, #przeksztalcenie nazw atrybutow elibri => nasza baza
@@ -124,12 +118,19 @@ class Product < ActiveRecord::Base
              :name => :name #przeksztalcenie nazw atrybutow elibri => nasza baza
            }
          },
+         :related_products => {
+           :related_products => {
+             :record_reference => :related_record_reference,
+             :relation_code => :onix_code
+           }
+         },
          :front_cover => [
            nil,
            lambda do |product, cover_class|
-             product.send(:write_attribute, :cover_link, cover_class.link)
+             product.send(:write_attribute, :cover_link, cover_class.link) if cover_class
            end
            ] #wpisujemy link do okładki w pole
+        
          
          policy_chain << lambda do |object, attribute, pre, post|  ### example of using lambda as a policy
            if object == :product

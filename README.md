@@ -110,7 +110,19 @@ example vector:
  :imprint => {
    :name => :name
  }
-}
+},
+:related_products => {
+  :related_products => {
+    :record_reference => :related_record_reference,
+    :relation_code => :onix_code
+  }
+},
+:front_cover => [
+  nil,
+  lambda do |product, cover_class|
+    product.send(:write_attribute, :cover_link, cover_class.link) if cover_class
+  end
+  ] #we enter link to cover in field - however remember that hotlinking from eLibri is forbidden - this is just an example
 ```
 
 Also if you want to check for some particular changes in object - you can use policy chain.
