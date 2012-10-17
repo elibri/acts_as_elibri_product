@@ -19,4 +19,4 @@ gem "jquery-rails"
 #gem "elibri_onix_mocks", :path => '/Users/esse/work/gildia/elibri_onix_mocks'
 #gem "elibri_xml_versions", :git => 'https://github.com/elibri/elibri_xml_versions.git'
 
-gem 'elibri_onix', :path => '/Users/esse/work/gildia/elibri_onix'
+gem 'elibri_onix' #, :path => '/Users/esse/work/gildia/elibri_onix'

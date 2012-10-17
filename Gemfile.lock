@@ -1,18 +1,9 @@
 PATH
   remote: .
   specs:
-    acts_as_elibri_product (0.2.3)
+    acts_as_elibri_product (0.2.3.1)
       elibri_xml_versions
       rails
-
-PATH
-  remote: /Users/esse/work/gildia/elibri_onix
-  specs:
-    elibri_onix (0.2.1)
-      activesupport (>= 2.3.5)
-      elibri_onix_dict (>= 0.0.5)
-      i18n
-      nokogiri
 
 GEM
   remote: http://rubygems.org/
@@ -52,6 +43,11 @@ GEM
       elibri_onix (>= 0.1.11)
       httparty (= 0.8.1)
       nokogiri (~> 1.5.0)
+    elibri_onix (0.2.1)
+      activesupport (>= 2.3.5)
+      elibri_onix_dict (>= 0.0.5)
+      i18n
+      nokogiri
     elibri_onix_dict (0.0.13)
     elibri_onix_generator (0.1.2)
       builder
@@ -147,7 +143,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_elibri_product!
-  elibri_onix!
+  elibri_onix
   elibri_onix_generator
   elibri_onix_mocks
   jquery-rails
