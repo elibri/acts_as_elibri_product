@@ -8,7 +8,7 @@ class RelatedProduct < ActiveRecord::Base
   end
   
   def self.objects
-    joins(:product).first.product.related_products.map { |x| Product.where(:record_reference => x.related_record_reference).first }
+    joins(:product).first.product.related_products.map { |x| Product.where(:record_reference => x.related_record_reference).first }.compact
   end
   
 end

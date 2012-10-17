@@ -358,6 +358,5 @@ describe ActsAsElibriProduct do
     main.related_products.objects[0].record_reference.should eq('fdb8fa072be774d97a95')
     main.related_products.objects[1].record_reference.should eq('fdb8fa072be774d97a98')
   end
-
   
 end

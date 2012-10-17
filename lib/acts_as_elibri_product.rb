@@ -127,7 +127,8 @@ module ActsAsElibriProduct
               end
             end
           else
-            if traverse_vector[change.keys.first].is_a?(Array)
+            if traverse_vector[change.keys.first].is_a?(Array)                      #X                                                   X
+              next if product.nil? || product_updated.nil? || product.send(change.keys.first).nil?
               next unless check_policy_chain(self, change.keys.first, elibri_attrib, product.send(change.keys.first).send(elibri_attrib), product_updated.send(change.keys.first).send(elibri_attrib))
               if traverse_vector[change.keys.first][0].nil?
                 traverse_vector[change.keys.first][1].call(self, product_updated.send(change.keys.first))
