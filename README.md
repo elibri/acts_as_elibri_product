@@ -2,7 +2,7 @@
 
 Gem designed to allow easy addition of eLibri based product to your application.
 
-Working under 1.8 version of Ruby.
+Working under 1.8, ree and 1.9.3 version of Ruby
 
 Usage guide:  
 
