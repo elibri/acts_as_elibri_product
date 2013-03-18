@@ -1,4 +1,5 @@
 require 'elibri_xml_versions'
+require 'acts_as_elibri_product/object'
 require 'ostruct'
 
 module ActsAsElibriProduct

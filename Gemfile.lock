@@ -147,6 +147,7 @@ DEPENDENCIES
   elibri_onix_generator
   elibri_onix_mocks
   jquery-rails
+  rdoc
   rspec
   rspec-rails
   sqlite3

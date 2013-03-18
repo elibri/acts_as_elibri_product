@@ -1,3 +1,4 @@
+#encoding: UTF-8
 require 'spec_helper'
 
 #silencing warnings from comparer
