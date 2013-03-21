@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120518092127) do
+ActiveRecord::Schema.define(:version => 20130321131042) do
 
   create_table "contributors", :force => true do |t|
     t.integer  "import_id"
@@ -79,6 +79,11 @@ ActiveRecord::Schema.define(:version => 20120518092127) do
     t.datetime "updated_at",                           :null => false
     t.text     "old_xml"
     t.string   "cover_link"
+    t.integer  "publisher_id"
+  end
+
+  create_table "publishers", :force => true do |t|
+    t.string "name"
   end
 
   create_table "related_products", :force => true do |t|

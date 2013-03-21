@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    acts_as_elibri_product (0.2.3.2)
+    acts_as_elibri_product (0.2.4)
       elibri_xml_versions
       rails
 
@@ -59,7 +59,7 @@ GEM
       elibri_onix_dict
       elibri_onix_generator
       mocha
-    elibri_xml_versions (0.1.4)
+    elibri_xml_versions (0.1.6)
       elibri_api_client
       elibri_onix_dict
     erubis (2.7.0)

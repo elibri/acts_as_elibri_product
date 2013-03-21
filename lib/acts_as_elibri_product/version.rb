@@ -1,3 +1,3 @@
 module ActsAsElibriProduct
-  VERSION = "0.2.3.2"
+  VERSION = "0.2.4"
 end

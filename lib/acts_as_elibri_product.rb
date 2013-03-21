@@ -196,8 +196,8 @@ end
         end
       end
     else
-      db_product.send("build_#{db_object_name}").tap do |inner_object|
-    #    db_product.send
+      if elibri_objects.respond_to?(:eid) && db_object_name.to_s.camelize.constantize.where(:id => elibri_objects.eid).first
+        inner_object = db_object_name.to_s.camelize.constantize.where(:id => elibri_objects.eid).first #na czyms musimy polega jako na persystencji tutaj
         object_traverse_vector.each_pair do |k, v|
           if v.is_a?(Hash)
             #TODO
@@ -207,6 +207,19 @@ end
           end
         end
         inner_object.save
+      else
+        db_product.send("build_#{db_object_name}").tap do |inner_object|
+      #    db_product.send
+          object_traverse_vector.each_pair do |k, v|
+            if v.is_a?(Hash)
+              #TODO
+             # set_objects_from_array(object.send(v.keys.first), v.values.first, product, k)
+            else
+              inner_object.send(:write_attribute, v, elibri_objects.send(k))
+            end
+          end
+          inner_object.save
+        end
       end
     end
   end

@@ -44,6 +44,8 @@ class Product < ActiveRecord::Base
     product.has_one :imprint
     product.has_many :related_products
   end
+  
+  belongs_to :publisher
 
   attr_accessible :isbn, :title, :full_title, :trade_title, :original_title, :publication_year,
                   :publication_month, :publication_day, :number_of_pages, :width, :height, 
@@ -88,6 +90,12 @@ class Product < ActiveRecord::Base
          :product_form => :product_form,
          :no_contributor? => :no_contributor,
          :unnamed_persons? => :unnamed_persons,
+         :publisher => {
+           :publisher => {
+             :eid => :id,
+             :name => :name
+           }
+         },
          :contributors => { #Jak się nazywa w eLibri
            :contributors => { #Jak się nazywa w naszej bazie
              :id => :import_id, #przeksztalcenie nazw atrybutow elibri => nasza baza
