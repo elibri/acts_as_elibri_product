@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class ProductText < ActiveRecord::Base
 
   belongs_to :product, :touch => true
