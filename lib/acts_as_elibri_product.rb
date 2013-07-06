@@ -1,5 +1,7 @@
 require 'elibri_xml_versions'
 require 'acts_as_elibri_product/object'
+require 'acts_as_elibri_product/array'
+require 'acts_as_elibri_product/string'
 require 'ostruct'
 
 module ActsAsElibriProduct
