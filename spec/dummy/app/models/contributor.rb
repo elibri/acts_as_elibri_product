@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class Contributor < ActiveRecord::Base
 
   belongs_to :product, :touch => true

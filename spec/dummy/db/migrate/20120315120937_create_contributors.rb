@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateContributors < ActiveRecord::Migration
   def change
     create_table :contributors do |t|

@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddOldXmlTo<%= model_name %>Model < ActiveRecord::Migration
   def up
     add_column :<%= table_name %>, :old_xml, :text

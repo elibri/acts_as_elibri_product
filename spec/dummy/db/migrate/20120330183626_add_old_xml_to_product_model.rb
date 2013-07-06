@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class AddOldXmlToProductModel < ActiveRecord::Migration
   def up
     add_column :products, :old_xml, :text

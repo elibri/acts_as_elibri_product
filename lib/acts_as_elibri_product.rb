@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'elibri_xml_versions'
 require 'acts_as_elibri_product/object'
 require 'acts_as_elibri_product/array'
@@ -36,8 +37,8 @@ module ActsAsElibriProduct
       return true
     end
     
-    def create_from_elibri(xml_string)
-      product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(xml_string).products.first
+    def create_from_elibri(xml_string, tracing_object = nil)
+      product = Elibri::ONIX::Release_3_0::ONIXMessage.new(xml_string).products.first
       db_product = self.new
       @@traverse_vector.each_pair do |k, v|
         if v.is_a?(Symbol)
@@ -57,21 +58,20 @@ module ActsAsElibriProduct
       db_product.save
     end
 
-    def create_or_update_from_elibri(xml_string)
-      recreated_product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(xml_string).products.first
-      if Product.find(:first, :conditions => {:record_reference => recreated_product.record_reference})
-      #update
-        Product.find(:first, :conditions => {:record_reference => recreated_product.record_reference}).update_product_from_elibri(xml_string)
+    def create_or_update_from_elibri(xml_string, tracing_object=nil)
+      recreated_product = Elibri::ONIX::Release_3_0::ONIXMessage.new(xml_string).products.first
+      if Product.find(:first, :conditions => {:record_reference => recreated_product.record_reference}) #update
+        Product.find(:first, :conditions => {:record_reference => recreated_product.record_reference}).update_product_from_elibri(xml_string, tracing_object)
       else
-        Product.create_from_elibri(xml_string)
+        Product.create_from_elibri(xml_string, tracing_object)
       end
     end
     
-    def batch_create_or_update_from_elibri(xml_string)
+    def batch_create_or_update_from_elibri(xml_string, tracing_object = nil)
       if xml_string.is_a?(Elibri::ONIX::Release_3_0::ONIXMessage)
         recreated_products = xml_string
       else
-        recreated_products = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(xml_string)
+        recreated_products = Elibri::ONIX::Release_3_0::ONIXMessage.new(xml_string)
       end
       recreated_products.products.each do |product|
         xml = product.to_xml.to_s
@@ -81,18 +81,20 @@ module ActsAsElibriProduct
                       <elibri:Dialect>#{dialect}</elibri:Dialect>"
 
         xml = header + xml + "</ONIXMessage>"
-        create_or_update_from_elibri(xml)
+        create_or_update_from_elibri(xml, tracing_object)
       end
     end
     
   end
   
-  def update_product_from_elibri(new_xml)
+  def update_product_from_elibri(new_xml, tracing_object = nil)
     if (read_attribute :old_xml).blank?
       raise "Empty old_xml column on product"
     end
-    product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(read_attribute :old_xml).products.first
-    product_updated = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(new_xml).products.first
+    product = Elibri::ONIX::Release_3_0::ONIXMessage.new(read_attribute :old_xml).products.first
+    product_updated = Elibri::ONIX::Release_3_0::ONIXMessage.new(new_xml).products.first
+    tracing_object.register_xml_comparission(product, product_updated) if tracing_object
+
     elibri_xml_versions = Elibri::XmlVersions.new(product, product_updated)
     details = elibri_xml_versions.diff
     details[:changes].each do |change|

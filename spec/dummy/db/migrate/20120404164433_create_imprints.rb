@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class CreateImprints < ActiveRecord::Migration
   def change
     create_table :imprints do |t|
