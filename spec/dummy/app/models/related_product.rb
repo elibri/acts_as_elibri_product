@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 class RelatedProduct < ActiveRecord::Base
-  attr_accessible :onix_code, :product_id, :related_record_reference
+#  attr_accessible :onix_code, :product_id, :related_record_reference
   
   belongs_to :product
   

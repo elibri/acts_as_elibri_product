@@ -48,10 +48,10 @@ class Product < ActiveRecord::Base
   
   belongs_to :publisher
 
-  attr_accessible :isbn, :title, :full_title, :trade_title, :original_title, :publication_year,
-                  :publication_month, :publication_day, :number_of_pages, :width, :height, 
-                  :cover_type, :edition_statement, :audience_age_from, :audience_age_to, 
-                  :price_amount, :vat, :current_state, :product_form, :old_xml
+#  attr_accessible :isbn, :title, :full_title, :trade_title, :original_title, :publication_year,
+#                  :publication_month, :publication_day, :number_of_pages, :width, :height, 
+#                  :cover_type, :edition_statement, :audience_age_from, :audience_age_to, 
+#                  :price_amount, :vat, :current_state, :product_form, :old_xml
   
   @@tester = 0
                   

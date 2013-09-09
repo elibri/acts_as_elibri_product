@@ -60,8 +60,8 @@ module ActsAsElibriProduct
 
     def create_or_update_from_elibri(xml_string, tracing_object=nil)
       recreated_product = Elibri::ONIX::Release_3_0::ONIXMessage.new(xml_string).products.first
-      if Product.find(:first, :conditions => {:record_reference => recreated_product.record_reference}) #update
-        Product.find(:first, :conditions => {:record_reference => recreated_product.record_reference}).update_product_from_elibri(xml_string, tracing_object)
+      if Product.where(:record_reference => recreated_product.record_reference).first #update
+        Product.where(:record_reference => recreated_product.record_reference).first.update_product_from_elibri(xml_string, tracing_object)
       else
         Product.create_from_elibri(xml_string, tracing_object)
       end

@@ -1,4 +1,4 @@
-# -*- encoding : utf-8 -*-
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -9,11 +9,11 @@
 # from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
-# It's strongly recommended to check this file into your version control system.
+# It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130321131042) do
+ActiveRecord::Schema.define(version: 20130321131042) do
 
-  create_table "contributors", :force => true do |t|
+  create_table "contributors", force: true do |t|
     t.integer  "import_id"
     t.integer  "product_id"
     t.string   "role_name"
@@ -26,18 +26,18 @@ ActiveRecord::Schema.define(:version => 20130321131042) do
     t.string   "last_name"
     t.string   "last_name_postfix"
     t.text     "biography"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
-  create_table "imprints", :force => true do |t|
+  create_table "imprints", force: true do |t|
     t.integer  "product_id"
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "product_texts", :force => true do |t|
+  create_table "product_texts", force: true do |t|
     t.integer  "import_id"
     t.integer  "product_id"
     t.text     "text"
@@ -45,12 +45,12 @@ ActiveRecord::Schema.define(:version => 20130321131042) do
     t.string   "text_author"
     t.string   "source_title"
     t.string   "resource_link"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
-  create_table "products", :force => true do |t|
-    t.string   "record_reference",                     :null => false
+  create_table "products", force: true do |t|
+    t.string   "record_reference",                  null: false
     t.string   "isbn"
     t.string   "title"
     t.string   "full_title"
@@ -72,26 +72,26 @@ ActiveRecord::Schema.define(:version => 20130321131042) do
     t.string   "pkwiu"
     t.string   "current_state"
     t.string   "product_form"
-    t.boolean  "preview_exists",    :default => false
-    t.boolean  "no_contributor",    :default => false
-    t.boolean  "unnamed_persons",   :default => false
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+    t.boolean  "preview_exists",    default: false
+    t.boolean  "no_contributor",    default: false
+    t.boolean  "unnamed_persons",   default: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.text     "old_xml"
     t.string   "cover_link"
     t.integer  "publisher_id"
   end
 
-  create_table "publishers", :force => true do |t|
+  create_table "publishers", force: true do |t|
     t.string "name"
   end
 
-  create_table "related_products", :force => true do |t|
+  create_table "related_products", force: true do |t|
     t.integer  "product_id"
     t.string   "related_record_reference"
     t.string   "onix_code"
-    t.datetime "created_at",               :null => false
-    t.datetime "updated_at",               :null => false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
 end

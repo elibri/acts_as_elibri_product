@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 class Imprint < ActiveRecord::Base
-  attr_accessible :name, :product_id
+#  attr_accessible :name, :product_id
   
   belongs_to :product
   

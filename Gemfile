@@ -21,3 +21,5 @@ gem "jquery-rails"
 
 gem 'elibri_onix' #, :path => '/Users/esse/work/gildia/elibri_onix'
 gem 'rdoc'
+gem 'database_cleaner'
+#gem 'byebug'

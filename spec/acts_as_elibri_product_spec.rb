@@ -5,10 +5,11 @@ require 'spec_helper'
 #silencing warnings from comparer
 $VERBOSE = nil
 
+
+
 describe ActsAsElibriProduct do
 
   it "should raise an exception when given product with empty old_xml" do
-    Product.count.should eq(0)
     book = Elibri::XmlMocks::Examples.book_example(:record_reference => 'abcd', :contributors => [Elibri::XmlMocks::Examples.contributor_mock])
     book_xml = Elibri::ONIX::XMLGenerator.new(book).to_s
     product = Elibri::ONIX::Release_3_0::ONIXMessage.from_xml(book_xml).products.first
