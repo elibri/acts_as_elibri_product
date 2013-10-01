@@ -100,7 +100,9 @@ module ActsAsElibriProduct
     details[:changes].each do |change|
       if change.is_a?(Symbol) && traverse_vector[change]
         if traverse_vector[change].is_a?(Array)
-          next unless check_policy_chain(self, :product, traverse_vector[change], self.send(traverse_vector[change][0]), product_updated.send(change))
+          if !traverse_vector[change][0].nil?
+            next unless check_policy_chain(self, :product, traverse_vector[change], self.send(traverse_vector[change][0]), product_updated.send(change))
+          end
           if traverse_vector[change][0].nil?
             traverse_vector[change][1].call(self, product_updated.send(change))
           else
